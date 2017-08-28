@@ -1,0 +1,16 @@
+{
+  "name": "vatsim-data",
+  "version": "1.0.0",
+  "description": "Downloads VATSIM data and uploads it to Amazon S3",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Neil Farrington",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.104.0",
+    "node-file-cache": "^1.0.2",
+    "request": "^2.81.0"
+  }
+}
