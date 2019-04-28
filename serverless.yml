@@ -9,13 +9,21 @@ provider:
     - Effect: Allow
       Action:
         - s3:PutObject
-      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+      Resource: arn:aws:s3:::${self:custom.bucket}/*
 
 custom:
   bucket: vatsim-data-${opt:stage, self:provider.stage}
+  stage: ${opt:stage, self:provider.stage}
+  prd:
+    schedule:
+      rate: rate(1 minute)
+  dev:
+    schedule:
 
 functions:
   store:
     handler: handler.store
     environment:
       BUCKET: ${self:custom.bucket}
+    events:
+      - schedule: ${self:custom.${self:custom.stage}.schedule}
