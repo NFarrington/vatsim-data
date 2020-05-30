@@ -9,8 +9,8 @@
   "author": "Neil Farrington",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.104.0",
+    "aws-sdk": "^2.686.0",
     "node-file-cache": "^1.0.2",
-    "request": "^2.81.0"
+    "request": "^2.88.2"
   }
 }
