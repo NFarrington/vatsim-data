@@ -2,9 +2,7 @@ const cacheFile = '/tmp/vatsim-data-cache';
 const cacheLife = 60 * 60 * 3; // 3 hours
 const statusUrl = 'https://status.vatsim.net/';
 
-const dataServerBlacklist = [
-    'http://data.vattastic.com/vatsim-data.txt', // presents the wrong encoding type causing replacement characters
-];
+const dataServerBlacklist = [];
 
 const cache = require('node-file-cache').create({ file: cacheFile, life: cacheLife });
 const request = require('request');
