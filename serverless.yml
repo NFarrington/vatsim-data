@@ -1,24 +1,36 @@
+frameworkVersion: "^2.1.0"
+
 service: vatsim-data
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
-  region: us-east-1
+  stage: ${opt:stage, 'dev'}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - s3:PutObject
       Resource: arn:aws:s3:::${self:custom.bucket}/*
+  deploymentBucket:
+    name: serverless-${self:provider.stage}-therailroad
+    blockPublicAccess: true
+    serverSideEncryption: AES256
+  logRetentionInDays: ${self:custom.${self:provider.stage}.logRetentionInDays}
 
 custom:
-  bucket: vatsim-data-${opt:stage, self:provider.stage}
-  stage: ${opt:stage, self:provider.stage}
-  prd:
+  bucket: vatsim-data-${opt:stage, self:provider.stage}-therailroad
+  prod:
     schedule:
+      enabled: true
+      name: ${self:service}-vatsimData-schedule
       rate: rate(1 minute)
+    logRetentionInDays: 7
   dev:
     schedule:
+      enabled: false
+      name: ${self:service}-vatsimData-schedule
+      rate: rate(1 minute)
+    logRetentionInDays: 7
 
 functions:
   store:
