@@ -25,6 +25,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         if: matrix.should_run
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+        if: matrix.should_run
+      - run: npm ci
+        if: matrix.should_run
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
