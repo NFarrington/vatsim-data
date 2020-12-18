@@ -1,6 +1,6 @@
 frameworkVersion: "^2.1.0"
 
-service: vatsim-data
+service: vatsimData
 
 provider:
   name: aws
@@ -18,17 +18,17 @@ provider:
   logRetentionInDays: ${self:custom.${self:provider.stage}.logRetentionInDays}
 
 custom:
-  bucket: vatsim-data-${opt:stage, self:provider.stage}-therailroad
+  bucket: vatsim-data-${self:provider.stage}-therailroad
   prod:
     schedule:
       enabled: true
-      name: ${self:service}-vatsimData-schedule
+      name: ${self:service}-schedule
       rate: rate(1 minute)
     logRetentionInDays: 7
   dev:
     schedule:
       enabled: false
-      name: ${self:service}-vatsimData-schedule
+      name: ${self:service}-schedule
       rate: rate(1 minute)
     logRetentionInDays: 7
 
@@ -38,4 +38,4 @@ functions:
     environment:
       BUCKET: ${self:custom.bucket}
     events:
-      - schedule: ${self:custom.${self:custom.stage}.schedule}
+      - schedule: ${self:custom.${self:provider.stage}.schedule}
