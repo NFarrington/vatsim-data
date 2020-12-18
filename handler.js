@@ -81,9 +81,14 @@ module.exports.store = (event, context, callback) => {
     getDataServer()
         .then(getData)
         .then(function uploadToS3(data) {
+            const date = new Date()
             return s3.upload({
                 Bucket: process.env.BUCKET,
-                Key: dataTimestamp + '.txt',
+                Key: date.getUTCFullYear() + '/'
+                    + date.getUTCMonth() + '/'
+                    + date.getUTCDay() + '/'
+                    + date.getUTCHours() + '/'
+                    + dataTimestamp + '.txt',
                 Body: data,
             }).promise();
         })
