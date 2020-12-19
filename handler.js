@@ -90,6 +90,7 @@ module.exports.store = (event, context, callback) => {
                     + date.getUTCHours() + '/'
                     + dataTimestamp + '.txt',
                 Body: data,
+                ServerSideEncryption: 'AES256',
             }).promise();
         })
         .then(success => callback(null, success))
