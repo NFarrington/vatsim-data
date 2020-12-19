@@ -8,6 +8,7 @@ const cache = require('node-file-cache').create({ file: cacheFile, life: cacheLi
 const request = require('request');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
+const zlib = require('zlib');
 
 let dataTimestamp = null;
 
@@ -77,9 +78,22 @@ function getData(url) {
     });
 }
 
+function compressData(data) {
+    return new Promise(function (resolve, reject) {
+        zlib.gzip(data, (err, buffer) => {
+            if (err) {
+                reject(Error('Error gzipping data.'))
+            }
+
+            resolve(buffer)
+        });
+    });
+}
+
 module.exports.store = (event, context, callback) => {
     getDataServer()
         .then(getData)
+        .then(compressData)
         .then(function uploadToS3(data) {
             const date = new Date()
             return s3.upload({
@@ -88,7 +102,7 @@ module.exports.store = (event, context, callback) => {
                     + date.getUTCMonth() + '/'
                     + date.getUTCDay() + '/'
                     + date.getUTCHours() + '/'
-                    + dataTimestamp + '.txt',
+                    + dataTimestamp + '.txt.gz',
                 Body: data,
                 ServerSideEncryption: 'AES256',
             }).promise();
